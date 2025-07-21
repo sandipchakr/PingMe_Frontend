@@ -1,7 +1,5 @@
 import React from 'react'
 import homepageImg from "../assets/snowmountain.jpg"
-import home2 from "../assets/orangesunset.jpg"
-import home3 from "../assets/homepagepic.jpg";
 import { Link } from 'react-router-dom';
 
 function HomePage() {

@@ -22,7 +22,7 @@
 // export default Footer
 
 import React from 'react'
-import logo from "../../assets/logoblack.png"
+import logo from "../../assets/logo.png"
 export default function Footer() {
   return (
     <footer className="bg-blue-400">

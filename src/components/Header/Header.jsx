@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from "../../context/AuthProvider";
 import logo from "../../assets/logo.png";
-import homepageImg from "../../assets/homepagepic.jpg"
-import Profile from '../Profile';
 import { House } from 'lucide-react';
 
 function Header() {
