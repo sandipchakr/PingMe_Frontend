@@ -13,9 +13,11 @@ function Profile() {
   const [posts, setPosts] = useState([]);
   const [likes, setLikes] = useState([]);
   const [comments, setComments] = useState([]);
+  const [Loading, setLoading] = useState(false);
   useEffect(() => {
     // Fetch all posts when page loads
     const fetchPosts = async () => {
+      setLoading(true);
       try {
         const res = await fetch(`${BACKEND_URL}/api/posts/myPosts`, {
           credentials: 'include'
@@ -28,6 +30,8 @@ function Profile() {
 
       } catch (error) {
         console.error("Failed to load posts:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -142,97 +146,114 @@ function Profile() {
         <p className="bg-green-300 p-3 text-xl font-bold text-white w-2/3 sm:w-1/3 mx-2 rounded-2xl">
           Total Posts: {posts.length}
         </p>
-        {posts.length === 0 && <p className="text-gray-500 italic">No posts yet.</p>}
-        {posts.map((post) => {
-          const imageUrl = post.createdBy?.profileImageURL?.startsWith('http')
-            ? post.createdBy.profileImageURL
-            : `${BACKEND_URL}${post.createdBy?.profileImageURL}`;
-
-          const postComments = comments.filter(comment => comment.postId === post._id);
-          const postLikes = likes.filter(like => like.postId === post._id);
-          return (
-            <div key={post._id} className="bg-white p-3 rounded-xl shadow flex flex-col justify-center items-start gap-2 mx-2">
-              <Link to={`/post/${post._id}`} className="w-full flex flex-col items-start gap-1">
-                <div className="text-sm text-gray-700 flex items-center gap-2">
-                  <img
-                    src={imageUrl}
-                    crossOrigin="anonymous"
-                    alt="profile"
-                    className="h-9 w-9 rounded-full object-cover"
-                  />
-                  <span>{post.createdBy?.fullname || "Unknown"}</span>:
-                  <span className="italic text-gray-400">{format(post.createdAt)}</span>
-                </div>
-
-                <div>
-                  <h2 className="text-xl font-bold text-gray-800">{post.title}</h2>
-                </div>
-
-                <div className="w-full flex justify-start items-center bg-gray-100 rounded">
-                  <img
-                    src={post.coverImgUrl}
-                    alt={post.title}
-                    className="h-[40vh] w-full object-cover"
-                  />
-                </div>
-              </Link>
-              <div className="flex justify-start iteam-center w-full gap-1">
-                <p className="text-gray-600">
-                  {post.content.length > 25
-                    ? post.content.slice(0, 25) + '...'
-                    : post.content}
-                </p>
-                <Link to={`/post/${post._id}`} className="text-blue-500 hover:underline mt-1 text-sm italic">
-                  Read more
-                </Link>
-              </div>
-              <div className="flex justify-evenly items-center w-full mt-2 ">
-                <div className="w-full flex justify-evenly  items-center">
-                  <div>
-                    <div className="flex items-center gap-1 ">
-                      {postLikes.some(like => like.userId === user?._id) ? (
-                        <Heart
-                          className="text-red-600 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
-                          onClick={() => toggleLike(post._id)}
-                        />
-                      ) : (
-                        <Heart
-                          className="text-gray-500 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
-                          onClick={() => toggleLike(post._id)}
-                        />
-                      )}
-                      <span className="text-sm text-gray-600">{postLikes.length}</span>
-                    </div>
+        {Loading ? ([1, 2, 3].map((_, index) => (
+          <div key={index} className="mx-auto w-full max-w-sm rounded-md border  p-4 animate-pulse bg-white">
+            <div className="flex space-x-4">
+              <div className="size-10 rounded-full bg-gray-200"></div>
+              <div className="flex-1 space-y-6 py-1">
+                <div className="h-2 rounded bg-gray-200"></div>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-2 h-2 rounded bg-gray-200"></div>
+                    <div className="col-span-1 h-2 rounded bg-gray-200"></div>
                   </div>
-                  <div className='flex items-center gap-1 hover:text-green-500 transform hover:scale-110 transition duration-150'>
-                    <Link to={`/post/${post._id}`} className="flex items-center">
-                      <MessageCircle />
-                      <span>{postComments.length}</span>
+                  <div className="h-2 rounded bg-gray-200"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))) :
+          posts.length === 0 ? (<p className="text-gray-500 italic">No posts yet.</p>) :
+            (posts.map((post) => {
+              const imageUrl = post.createdBy?.profileImageURL?.startsWith('http')
+                ? post.createdBy.profileImageURL
+                : `${BACKEND_URL}${post.createdBy?.profileImageURL}`;
+
+              const postComments = comments.filter(comment => comment.postId === post._id);
+              const postLikes = likes.filter(like => like.postId === post._id);
+              return (
+                <div key={post._id} className="bg-white p-3 rounded-xl shadow flex flex-col justify-center items-start gap-2 mx-2">
+                  <Link to={`/post/${post._id}`} className="w-full flex flex-col items-start gap-1">
+                    <div className="text-sm text-gray-700 flex items-center gap-2">
+                      <img
+                        src={imageUrl}
+                        crossOrigin="anonymous"
+                        alt="profile"
+                        className="h-9 w-9 rounded-full object-cover"
+                      />
+                      <span>{post.createdBy?.fullname || "Unknown"}</span>:
+                      <span className="italic text-gray-400">{format(post.createdAt)}</span>
+                    </div>
+
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-800">{post.title}</h2>
+                    </div>
+
+                    <div className="w-full flex justify-start items-center bg-gray-100 rounded">
+                      <img
+                        src={post.coverImgUrl}
+                        alt={post.title}
+                        className="h-[40vh] w-full object-cover"
+                      />
+                    </div>
+                  </Link>
+                  <div className="flex justify-start iteam-center w-full gap-1">
+                    <p className="text-gray-600">
+                      {post.content.length > 25
+                        ? post.content.slice(0, 25) + '...'
+                        : post.content}
+                    </p>
+                    <Link to={`/post/${post._id}`} className="text-blue-500 hover:underline mt-1 text-sm italic">
+                      Read more
+                    </Link>
+                  </div>
+                  <div className="flex justify-evenly items-center w-full mt-2 ">
+                    <div className="w-full flex justify-evenly  items-center">
+                      <div>
+                        <div className="flex items-center gap-1 ">
+                          {postLikes.some(like => like.userId === user?._id) ? (
+                            <Heart
+                              className="text-red-600 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
+                              onClick={() => toggleLike(post._id)}
+                            />
+                          ) : (
+                            <Heart
+                              className="text-gray-500 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
+                              onClick={() => toggleLike(post._id)}
+                            />
+                          )}
+                          <span className="text-sm text-gray-600">{postLikes.length}</span>
+                        </div>
+                      </div>
+                      <div className='flex items-center gap-1 hover:text-green-500 transform hover:scale-110 transition duration-150'>
+                        <Link to={`/post/${post._id}`} className="flex items-center">
+                          <MessageCircle />
+                          <span>{postComments.length}</span>
+                        </Link>
+                      </div>
+                    </div>
+
+                    <button
+                      className="px-2 rounded-full hover:text-red-600 hover:cursor-pointer transform hover:scale-110 transition duration-200"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDelete(post._id);
+                      }}
+                    >
+                      <Trash />
+                    </button>
+
+                    <Link to={`/postedit/${post._id}`} className='flex items-center'>
+                      <button className="px-2 rounded-full hover:text-blue-600 transform hover:scale-110 hover:cursor-pointer transition duration-200">
+                        <FilePenLine />
+                      </button>
                     </Link>
                   </div>
                 </div>
 
-                <button
-                  className="px-2 rounded-full hover:text-red-600 hover:cursor-pointer transform hover:scale-110 transition duration-200"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDelete(post._id);
-                  }}
-                >
-                  <Trash />
-                </button>
 
-                <Link to={`/postedit/${post._id}`} className='flex items-center'>
-                  <button className="px-2 rounded-full hover:text-blue-600 transform hover:scale-110 hover:cursor-pointer transition duration-200">
-                    <FilePenLine />
-                  </button>
-                </Link>
-              </div>
-            </div>
-
-
-          )
-        })}
+              )
+            }))}
       </div>
     </div>
 

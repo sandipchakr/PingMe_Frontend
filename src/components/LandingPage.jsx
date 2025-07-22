@@ -73,7 +73,7 @@ function LandingPage() {
       {/* Post List */}
       <div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 space-y-4 font-serif">
         {loading ? ( [1, 2, 3].map((_, index) => (
-      <div key={index} className="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4 animate-pulse bg-white">
+      <div key={index} className="mx-auto w-full max-w-sm rounded-md border  p-4 animate-pulse bg-white">
         <div className="flex space-x-4">
           <div className="size-10 rounded-full bg-gray-200"></div>
           <div className="flex-1 space-y-6 py-1">
