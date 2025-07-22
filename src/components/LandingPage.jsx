@@ -72,21 +72,23 @@ function LandingPage() {
 
       {/* Post List */}
       <div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 space-y-4 font-serif">
-        {loading ? (<div class="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4">
-          <div class="flex animate-pulse space-x-4">
-            <div class="size-10 rounded-full bg-gray-200"></div>
-            <div class="flex-1 space-y-6 py-1">
-              <div class="h-2 rounded bg-gray-200"></div>
-              <div class="space-y-3">
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="col-span-2 h-2 rounded bg-gray-200"></div>
-                  <div class="col-span-1 h-2 rounded bg-gray-200"></div>
-                </div>
-                <div class="h-2 rounded bg-gray-200"></div>
+        {loading ? ( [1, 2, 3].map((_, index) => (
+      <div key={index} className="mx-auto w-full max-w-sm rounded-md border border-blue-300 p-4 animate-pulse bg-white">
+        <div className="flex space-x-4">
+          <div className="size-10 rounded-full bg-gray-200"></div>
+          <div className="flex-1 space-y-6 py-1">
+            <div className="h-2 rounded bg-gray-200"></div>
+            <div className="space-y-3">
+              <div className="grid grid-cols-3 gap-4">
+                <div className="col-span-2 h-2 rounded bg-gray-200"></div>
+                <div className="col-span-1 h-2 rounded bg-gray-200"></div>
               </div>
+              <div className="h-2 rounded bg-gray-200"></div>
             </div>
           </div>
-        </div>) : posts.length === 0 ? (<p className="text-gray-500">No posts yet.</p>) : (
+        </div>
+      </div>
+    ))) : posts.length === 0 ? (<p className="text-gray-500">No posts yet.</p>) : (
 
 
           posts.map((post) => {
