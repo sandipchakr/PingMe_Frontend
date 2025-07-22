@@ -147,7 +147,7 @@ function Profile() {
           Total Posts: {posts.length}
         </p>
         {Loading ? ([1, 2, 3].map((_, index) => (
-          <div key={index} className="mx-auto w-full max-w-sm rounded-md border  p-4 animate-pulse bg-white">
+          <div key={index} className="mx-auto w-full max-w-sm rounded-md p-4 animate-pulse bg-white">
             <div className="flex space-x-4">
               <div className="size-10 rounded-full bg-gray-200"></div>
               <div className="flex-1 space-y-6 py-1">
