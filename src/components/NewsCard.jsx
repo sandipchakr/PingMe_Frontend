@@ -15,7 +15,7 @@ const NewsCard = ({ news }) => {
       <div className="p-4 flex flex-col gap-2">
 
         {/* Title */}
-        <h2 className="text-lg font-semibold line-clamp-2">
+        <h2 className="text-lg font-semibold line-clamp-2 text-white">
           {news.title}
         </h2>
 
