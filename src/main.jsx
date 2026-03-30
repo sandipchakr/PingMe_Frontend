@@ -14,6 +14,7 @@ import LandingPage from './components/LandingPage.jsx'
 import Post from './components/Post.jsx'
 import PostDetails from './components/PostDetails.jsx'
 import EditPost from './components/EditPost.jsx'
+import News from './components/News.jsx'
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
     {
       path:"/postedit/:id",
       element:<EditPost />
+    },
+    {
+      path:"/news",
+      element:<News/>
     }
   ]
 }])

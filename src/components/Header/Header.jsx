@@ -20,12 +20,21 @@ function Header() {
                         {user ? (
                             <>
                             <div className="flex justify-center iteam-center p-3 ">
-                                <Link
+                               <div className='pt-2'>
+                                    <Link className='text-white text-center text-md'
+                                    to="/news"
+                                    >
+                                News
+                                </Link>
+                                </div>
+                                <div>
+                                    <Link
                                     to="/landingpage"
                                     className="w-full"
                                 >
                                       <House className="w-9 h-9 text-white"/>
                                 </Link>
+                                </div>
                             </div>
                             {/* {console.log(user)} */}
                             {/* console.log(user),
