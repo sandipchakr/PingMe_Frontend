@@ -19,7 +19,7 @@ function Header() {
 
                         {user ? (
                             <>
-                            <div className="flex justify-center iteam-center p-3 ">
+                            <div className="flex justify-center iteam-center p-3 gap-4 ">
                                <div className='pt-2'>
                                     <Link className='text-white text-center text-md'
                                     to="/news"
