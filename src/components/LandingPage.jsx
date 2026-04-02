@@ -81,7 +81,7 @@ function LandingPage() {
 </Link>
 
       {/* Post List */}
-      <div className="grid md:grid-cols-3 lg:grid-cols-4 lg:gap-2 md:gap-4 p-6">
+      <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-2 p-6">
         {loading ? ( [1, 2, 3].map((_, index) => (
       <div key={index} className="mx-auto w-full max-w-sm rounded-md p-4 animate-pulse bg-white">
         <div className="flex space-x-4">
