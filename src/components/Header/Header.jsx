@@ -8,7 +8,7 @@ function Header() {
     const { user, loading } = useAuth();
     return (
         <header className="shadow sticky z-50 top-0 font-serif">
-            <nav className="bg-blue-400 shadow-md px-4 lg:px-4 py-2.5 ">
+            <nav className="bg-gradient-to-bl from-[#241f3c] to-[#050029] shadow-md px-4 lg:px-4 py-2.5 ">
                 <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                     <Link to="/">
                         <img src={logo} alt="logo"
@@ -20,7 +20,7 @@ function Header() {
                         {user ? (
                             <>
                             <div className="flex justify-center iteam-center p-3 gap-4 ">
-                               <div className='pt-2'>
+                               <div className='pt-2 bg-[#0a0189] hover:bg-[#010e1a] px-4 py-2 rounded-xl'>
                                     <Link className='text-white text-center text-md'
                                     to="/news"
                                     >

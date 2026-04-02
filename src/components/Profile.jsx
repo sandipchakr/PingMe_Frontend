@@ -113,39 +113,94 @@ function Profile() {
 
 
   return (
-    <div className="w-full min-h-screen bg-[#FFECDB] flex flex-col justify-start items-center p-2"
+    <div className="w-full min-h-screen bg-gradient-to-br from-[#02001b] to-blue-800 flex flex-col justify-start items-center p-2"
     >
-      <div className="w-full sm:w-3/8 md:w-2/8 lg:w-2/8 bg-white rounded-lg shadow-md p-3 mb-3 flex flex-col justify-center iteam-center gap-3">
-        <div className="font-serif text-md text-gray-700 flex flex-col items-center gap-2">
-          <img
-            src={user.profileImageURL}
-            crossOrigin="anonymous"
-            alt="profile"
-            className="h-12 w-12 rounded-full object-cover"
-          />
-          <span>{user.fullname || "Unknown"}</span>
-          <span>{user.email}</span>
+     {/*profile section*/}
+<div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 mb-6">
+  
+  {/* Cover Banner */}
+  <div className="relative h-24 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 overflow-hidden">
+    {/* Decorative blobs */}
+    <div className="absolute -top-4 -left-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
+    <div className="absolute -bottom-4 right-8 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl" />
+  </div>
 
-        </div>
-        <div className="w-full flex justify-evenly">
-          <button className="font-bold hover:cursor-pointer" onClick={logout}>
-            <LogOut className="w-8 h-8" />
-          </button>
-          <Link
-            to="/post"
-          >
-            <div className="hover:cursor-pointer">
-              <ImagePlus className="w-8 h-8" />
-            </div>
-          </Link>
-        </div>
+  {/* Card Body */}
+  <div className="relative bg-[#0d1b3e]/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl px-5 pt-10 pb-5 -mt-6 mx-2">
+
+    {/* Avatar — overlaps the banner */}
+    <div className="absolute -top-8 left-5">
+      <div className="relative">
+        <img
+          src={user.profileImageURL}
+          crossOrigin="anonymous"
+          alt="profile"
+          className="h-16 w-16 rounded-2xl object-cover ring-4 ring-[#0d1b3e] shadow-lg"
+        />
+        {/* Online dot */}
+        <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-400 rounded-full ring-2 ring-[#0d1b3e]" />
       </div>
+    </div>
 
-      {/* Post List */}
-      <div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 space-y-4 font-serif">
-        <p className="bg-green-300 p-3 text-xl font-bold text-white w-2/3 sm:w-1/3 mx-2 rounded-2xl">
+    {/* Name + Email */}
+    <div className="mb-4">
+      <h2 className="text-white font-bold text-lg leading-tight">
+        {user.fullname || "Unknown"}
+      </h2>
+      <p className="text-blue-300/80 text-sm">{user.email}</p>
+    </div>
+
+    {/* Stats Row */}
+    <div className="flex justify-around bg-white/5 rounded-xl py-3 mb-4 border border-white/10">
+      <div className="flex flex-col items-center">
+        <span className="text-white font-bold text-lg">{posts.length}</span>
+        <span className="text-gray-400 text-xs">Posts</span>
+      </div>
+      <div className="w-px bg-white/10" />
+      <div className="flex flex-col items-center">
+        <span className="text-white font-bold text-lg">
+          {posts.reduce((acc, p) => acc + likes.filter(l => l.postId === p._id).length, 0)}
+        </span>
+        <span className="text-gray-400 text-xs">Likes</span>
+      </div>
+      <div className="w-px bg-white/10" />
+      <div className="flex flex-col items-center">
+        <span className="text-white font-bold text-lg">
+          {posts.reduce((acc, p) => acc + comments.filter(c => c.postId === p._id).length, 0)}
+        </span>
+        <span className="text-gray-400 text-xs">Comments</span>
+      </div>
+    </div>
+
+    {/* Action Buttons */}
+    <div className="flex gap-2">
+      <Link to="/post" className="flex-1">
+        <button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 
+          text-white text-sm font-semibold py-2 rounded-xl transition-all duration-200 hover:shadow-[0_0_16px_rgba(59,130,246,0.5)]">
+          <ImagePlus className="w-4 h-4" />
+          New Post
+        </button>
+      </Link>
+      <button
+        onClick={logout}
+        className="flex items-center justify-center gap-2 bg-white/5 hover:bg-red-500/20 border border-white/10
+          hover:border-red-500/40 text-gray-300 hover:text-red-400 text-sm font-semibold px-4 py-2 
+          rounded-xl transition-all duration-200"
+      >
+        <LogOut className="w-4 h-4" />
+        Logout
+      </button>
+    </div>
+
+  </div>
+</div>
+<div className="bg-[#0307fc54] w-full border-r shadow-xl border-blue-300 p-3 text-xl font-bold text-white sm:w-1/3  rounded-xl mb-4">
+  <p>
           Total Posts: {posts.length}
-        </p>
+        </p></div>
+      {/* Post List */}
+      <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-2">
+        
         {Loading ? ([1, 2, 3].map((_, index) => (
           <div key={index} className="mx-auto w-full max-w-sm rounded-md p-4 animate-pulse bg-white">
             <div className="flex space-x-4">
@@ -172,9 +227,10 @@ function Profile() {
               const postComments = comments.filter(comment => comment.postId === post._id);
               const postLikes = likes.filter(like => like.postId === post._id);
               return (
-                <div key={post._id} className="bg-white p-3 rounded-xl shadow flex flex-col justify-center items-start gap-2 mx-2">
+                <div key={post._id} className="bg-gradient-to-r from-[#013e7b] to-[#123] border-r border-[#55a7f9] 
+              border-y-[#043efc] p-3 rounded-xl shadow flex flex-col justify-center items-start gap-2 mx-2">
                   <Link to={`/post/${post._id}`} className="w-full flex flex-col items-start gap-1">
-                    <div className="text-sm text-gray-700 flex items-center gap-2">
+                    <div className="text-sm text-gray-200 flex items-center gap-2">
                       <img
                         src={imageUrl}
                         crossOrigin="anonymous"
@@ -182,11 +238,11 @@ function Profile() {
                         className="h-9 w-9 rounded-full object-cover"
                       />
                       <span>{post.createdBy?.fullname || "Unknown"}</span>:
-                      <span className="italic text-gray-400">{format(post.createdAt)}</span>
+                      <span className="italic text-gray-100">{format(post.createdAt)}</span>
                     </div>
 
                     <div>
-                      <h2 className="text-xl font-bold text-gray-800">{post.title}</h2>
+                      <h2 className="text-xl font-bold text-gray-200">{post.title}</h2>
                     </div>
 
                     <div className="w-full flex justify-start items-center bg-gray-100 rounded">
@@ -198,7 +254,7 @@ function Profile() {
                     </div>
                   </Link>
                   <div className="flex justify-start iteam-center w-full gap-1">
-                    <p className="text-gray-600">
+                    <p className="text-gray-200">
                       {post.content.length > 25
                         ? post.content.slice(0, 25) + '...'
                         : post.content}
@@ -218,23 +274,23 @@ function Profile() {
                             />
                           ) : (
                             <Heart
-                              className="text-gray-500 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
+                              className="text-gray-300 cursor-pointer text-xl hover:text-red-500 transform hover:scale-110 transition duration-150"
                               onClick={() => toggleLike(post._id)}
                             />
                           )}
-                          <span className="text-sm text-gray-600">{postLikes.length}</span>
+                          <span className="text-sm text-gray-300">{postLikes.length}</span>
                         </div>
                       </div>
-                      <div className='flex items-center gap-1 hover:text-green-500 transform hover:scale-110 transition duration-150'>
-                        <Link to={`/post/${post._id}`} className="flex items-center">
+                      <div className='flex items-center gap-1  hover:text-green-500 transform hover:scale-110 transition duration-150'>
+                        <Link to={`/post/${post._id}`} className="flex items-center text-purple-400">
                           <MessageCircle />
-                          <span>{postComments.length}</span>
+                          <span className='text-gray-300'>{postComments.length}</span>
                         </Link>
                       </div>
                     </div>
 
                     <button
-                      className="px-2 rounded-full hover:text-red-600 hover:cursor-pointer transform hover:scale-110 transition duration-200"
+                      className="px-2 rounded-full text-red-400 hover:text-red-600 hover:cursor-pointer transform hover:scale-110 transition duration-200"
                       onClick={(e) => {
                         e.preventDefault();
                         handleDelete(post._id);
@@ -244,7 +300,7 @@ function Profile() {
                     </button>
 
                     <Link to={`/postedit/${post._id}`} className='flex items-center'>
-                      <button className="px-2 rounded-full hover:text-blue-600 transform hover:scale-110 hover:cursor-pointer transition duration-200">
+                      <button className="px-2 rounded-full text-blue-400 hover:text-blue-600 transform hover:scale-110 hover:cursor-pointer transition duration-200">
                         <FilePenLine />
                       </button>
                     </Link>

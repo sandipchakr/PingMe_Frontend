@@ -25,7 +25,7 @@ import React from 'react'
 import logo from "../../assets/logo.png"
 export default function Footer() {
   return (
-    <footer className="bg-blue-400">
+    <footer className="bg-gradient-to-bl from-[#241f3c] to-[#050029] shadow-md text-white">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="flex flex-wrap justify-between items-center px-6 max-w-screen-xl mx-auto">
           <div className="flex items-center">

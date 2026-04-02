@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigate,Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import Loader from './../animation/Loder';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const containerVariants = {
+  hidden: { x: -120, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
 
 function Signup() {
   const navigate = useNavigate();
@@ -41,9 +54,14 @@ function Signup() {
           <span>{servermsg} Now you need to Login..</span>
         </div>
       )}
-      {isSubmitting && <h4>Submitting...</h4>}
+      
       <div className="w-full flex justify-center items-center">
-        <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 min-h-[50vh] bg-white flex flex-col flex-wrap justify-evenly items-center rounded-2xl m-5 shadow-[6px_6px_10px_#a3a3a3,-8px_-8px_14px_#ffffff]">
+        <motion.div 
+         variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        className="relative w-full sm:w-2/3 md:w-1/2 lg:w-1/3 min-h-[50vh] bg-white flex flex-col flex-wrap justify-evenly items-center rounded-2xl m-5 shadow-[6px_6px_10px_#a3a3a3,-8px_-8px_14px_#ffffff]">
+          {isSubmitting && <Loader/>}
           <div className="w-[7rem] px-3 py-2 rounded-xl shadow-[inset_3px_3px_5px_#a3a3a3,inset_3px_3px_4px_#ffffff]">
             <span className='text-xl font-bold text-cyan-300'>SignUp</span>
             </div>
@@ -90,7 +108,7 @@ function Signup() {
             className='text-blue-400 underline ml-3'
             >Login</Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     </form>
   )
