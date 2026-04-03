@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from "../../context/AuthProvider";
 import logo from "../../assets/logo.png";
 import { House } from 'lucide-react';
+
 
 function Header() {
     const { user, loading } = useAuth();
@@ -19,55 +20,60 @@ function Header() {
 
                         {user ? (
                             <>
-                            <div className="flex justify-center iteam-center p-3 gap-4 ">
-                               <div className='pt-2 bg-[#0a0189] hover:bg-[#010e1a] px-4 py-2 rounded-xl'>
-                                    <Link className='text-white text-center text-md'
-                                    to="/news"
-                                    >
-                                News
-                                </Link>
+                                <div className="flex justify-center iteam-center p-3 gap-4 ">
+                                    <div className='pt-2 bg-[#0a0189] hover:bg-[#010e1a] px-4 py-2 rounded-xl'>
+                                        <Link className='text-white text-center text-md'
+                                            to="/news"
+                                        >
+                                            News
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <NavLink
+                                            to="/landingpage"
+                                            className="w-full"
+                                        >
+                                            {({ isActive }) => (
+                                                <House
+                                                    className={`w-9 h-9 ${isActive ? "text-[#50bfff]" : "text-white"
+                                                        }`}
+                                                />
+                                            )}
+                                        </NavLink>
+                                    </div>
                                 </div>
-                                <div>
-                                    <Link
-                                    to="/landingpage"
-                                    className="w-full"
-                                >
-                                      <House className="w-9 h-9 text-white"/>
-                                </Link>
-                                </div>
-                            </div>
-                            {/* {console.log(user)} */}
-                            {/* console.log(user),
+                                {/* {console.log(user)} */}
+                                {/* console.log(user),
                             // <p>Welcome, {user.fullname}</p> // should be add profile component, */}
-                            <div className="flex justify-center items-center p-2 ">
-                                <Link
-                                    to="/profile"
-                                    className='w-full flex justify-center items-center'
-                                >
-                                    <img src={user.profileImageURL}
-                                        crossOrigin="anonymous"
-                                        alt="profile"
-                                        className="h-9 w-9 rounded-full object-cover"
-                                    />
-                                </Link>
-                            </div>
+                                <div className="flex justify-center items-center p-2 ">
+                                    <Link
+                                        to="/profile"
+                                        className='w-full flex justify-center items-center '
+                                    >
+                                        <img src={user.profileImageURL}
+                                            crossOrigin="anonymous"
+                                            alt="profile"
+                                            className="h-9 w-9 rounded-full object-cover border-2 border-[#89e2fd]"
+                                        />
+                                    </Link>
+                                </div>
                             </>
                         ) :
-                        <div className=""> <div className="flex items-center ">
-                            <Link
-                                to="/login"
-                                className="bg-blue-500 text-white px-4 py-2 rounded-full mr-2  hover:bg-blue-700 transition duration-200"
-                            >
-                                Signin
-                            </Link>
-                            <Link
-                                to="/signup"
-                                className="bg-blue-500 text-white px-4 py-2 rounded-full  hover:bg-blue-700 transition duration-200"
-                            >
-                                Signup
-                            </Link>
-                        </div>
-                        </div>}
+                            <div className=""> <div className="flex items-center ">
+                                <Link
+                                    to="/login"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-full mr-2  hover:bg-blue-700 transition duration-200"
+                                >
+                                    Signin
+                                </Link>
+                                <Link
+                                    to="/signup"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded-full  hover:bg-blue-700 transition duration-200"
+                                >
+                                    Signup
+                                </Link>
+                            </div>
+                            </div>}
                     </div>
                 </div>
             </nav>
