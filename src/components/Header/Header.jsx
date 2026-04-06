@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from "../../context/AuthProvider";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/infogram.png";
 import { House } from 'lucide-react';
 
 

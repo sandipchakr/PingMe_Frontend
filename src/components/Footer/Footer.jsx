@@ -22,7 +22,7 @@
 // export default Footer
 
 import React from 'react'
-import logo from "../../assets/logo.png"
+import logo from "../../assets/infogram.png"
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-bl from-[#241f3c] to-[#050029] shadow-md text-white">
@@ -30,10 +30,10 @@ export default function Footer() {
         <div className="flex flex-wrap justify-between items-center px-6 max-w-screen-xl mx-auto">
           <div className="flex items-center">
             <img src={logo} alt="Logo" className="mr-3 h-12 w-auto" />
-            <span className="text-lg font-semibold">PingMe</span>
+            <span className="text-lg font-semibold">InfoGram</span>
           </div>
           <div className="text-sm">
-            © {new Date().getFullYear()} MyBlog. All rights reserved.
+            © {new Date().getFullYear()} InfoGram. All rights reserved.
           </div>
         </div>
       </div>
