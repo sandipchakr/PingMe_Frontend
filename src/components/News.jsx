@@ -17,6 +17,7 @@ const CATEGORIES = [
 ];
 
 const News = () => {
+  const [news, setNews] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState("general");
