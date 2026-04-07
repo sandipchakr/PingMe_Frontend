@@ -79,10 +79,14 @@ function Signup() {
           </div>
           <div className=' w-full flex flex-col justify-center items-center'>
             <span>Enter Email</span>
-            <input type="text" placeholder='Email'
+            <input type="email" placeholder='Email'
               className="w-2/3 p-1.5 text-lg  rounded-xl outline-none shadow-[inset_3px_3px_5px_#a3a3a3,inset_-3px_-3px_4px_#ffffff]"
               {...register("email", {
                 required: { value: true, message: "This fild is required.." },
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Please enter a valid email address"
+                }
               })}
             />
             {errors.email && <div className='bg-red-400 text-white p-1.5 rounded-3xl'>{errors.email.message}</div>}
