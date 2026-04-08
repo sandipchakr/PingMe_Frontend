@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
-import { Heart, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import { Heart, MessageCircle,Trash, FilePenLine } from "lucide-react";
 import { format } from "timeago.js"; // or wherever your format comes from
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL; // adjust to your env var
 
-const PostCard = ({ post, comments, likes, user, toggleLike }) => {
+const ProfilePostCard = ({ post, comments, likes, user, toggleLike, onDelete }) => {
     const imageUrl = post.createdBy?.profileImageURL?.startsWith("http")
         ? post.createdBy.profileImageURL
         : `${BACKEND_URL}${post.createdBy?.profileImageURL}`;
@@ -12,6 +13,32 @@ const PostCard = ({ post, comments, likes, user, toggleLike }) => {
     const postComments = comments.filter((c) => c.postId === post._id);
     const postLikes = likes.filter((l) => l.postId === post._id);
     const isLiked = postLikes.some((like) => like.userId === user?._id);
+    
+    {/* handle delete*/}
+    const [posts, setPosts] = useState([]);
+    const handleDelete = async (postId) => {
+    const confirmDelete = confirm("Are you sure you want to delete this post?");
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/posts/delete/${postId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        // Filter out the deleted post from local state
+        onDelete(postId); // Notify parent component about deletion
+        alert("Post deleted successfully.");
+      } else {
+       alert(data.message + " — " + (data.error || ""));
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Something went wrong.");
+    }
+  };
 
     return (
         <div className="bg-gradient-to-r from-[#013e7b] to-[#123] border-r border-[#55a7f9] border-y-[#043efc]
@@ -68,8 +95,7 @@ const PostCard = ({ post, comments, likes, user, toggleLike }) => {
                 <div className="flex items-center gap-1 mt-2">
                     <Heart
                         onClick={() => toggleLike(post._id)}
-                        className={`cursor-pointer text-xl transform hover:scale-110 transition duration-150
-                             ${isLiked ? "text-red-600" : "text-gray-200"
+                        className={`cursor-pointer text-xl transform hover:scale-110 transition duration-150 ${isLiked ? "text-red-600" : "text-gray-200"
                             }`}
                     />
                     <span className="text-sm text-gray-200">{postLikes.length}</span>
@@ -83,9 +109,23 @@ const PostCard = ({ post, comments, likes, user, toggleLike }) => {
                     </Link>
                 </div>
 
+                {/* Update */}
+                <div className="flex items-center gap-1 mt-2">
+                    <Link to={`/postedit/${post._id}`} className="flex items-center">
+                        <FilePenLine className="text-green-400 hover:text-green-500 transform hover:scale-110 transition duration-150" />
+                    </Link>
+                </div>
+
+                {/* Delete*/}
+
+                <div className="flex items-center gap-1 mt-2">
+                    <button onClick={()=>{handleDelete(post._id)}}>
+                        <Trash className="text-red-500 hover:text-red-700 transform hover:scale-110 transition duration-150 cursor-pointer" />
+                   </button>
+                </div>
             </div>
         </div>
     );
 };
 
-export default PostCard;
+export default ProfilePostCard;

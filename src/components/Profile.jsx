@@ -4,7 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import PostCard from './PostCard';
 import SkeletonCard from '../animation/SkeletonCard';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-import { LogOut, ImagePlus, Heart, MessageCircle, Trash, FilePenLine } from 'lucide-react';
+import { LogOut, ImagePlus, Heart, MessageCircle, } from 'lucide-react';
+import ProfilePostCard from './ProfilePostCard';
 {/* <Trash /> */ }
 
 function Profile() {
@@ -48,30 +49,32 @@ function Profile() {
 
 
   //handle delete:-
-  const handleDelete = async (postId) => {
-    const confirmDelete = confirm("Are you sure you want to delete this post?");
-    if (!confirmDelete) return;
+  // const handleDelete = async (postId) => {
+  //   const confirmDelete = confirm("Are you sure you want to delete this post?");
+  //   if (!confirmDelete) return;
 
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/posts/delete/${postId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+  //   try {
+  //     const res = await fetch(`${BACKEND_URL}/api/posts/delete/${postId}`, {
+  //       method: "DELETE",
+  //       credentials: "include",
+  //     });
 
-      const data = await res.json();
-      if (res.ok) {
-        // Filter out the deleted post from local state
-        setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
-        alert("Post deleted successfully.");
-      } else {
-        alert(data.message || "Failed to delete post.");
-      }
-    } catch (error) {
-      console.error("Delete error:", error);
-      alert("Something went wrong.");
-    }
+  //     const data = await res.json();
+  //     if (res.ok) {
+  //       // Filter out the deleted post from local state
+  //       setPosts((prevPosts) => prevPosts.filter((p) => p._id !== postId));
+  //       alert("Post deleted successfully.");
+  //     } else {
+  //       alert(data.message || "Failed to delete post.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Delete error:", error);
+  //     alert("Something went wrong.");
+  //   }
+  // };
+  const handlePostDeleted = (postId) => {
+    setPosts(prev => prev.filter(p => p._id !== postId));
   };
-
   const logout = async () => {
     try {
       const r = await fetch(`${BACKEND_URL}/api/user/logout`, { credentials: "include" });
@@ -115,110 +118,111 @@ function Profile() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-[#02001b] to-blue-800 flex flex-col justify-start items-center p-2"
     >
-     {/*profile section*/}
-<div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 mb-6">
-  
-  {/* Cover Banner */}
-  <div className="relative h-24 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 overflow-hidden">
-    {/* Decorative blobs */}
-    <div className="absolute -top-4 -left-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-    <div className="absolute -bottom-4 right-8 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl" />
-  </div>
+      {/*profile section*/}
+      <div className="w-full sm:w-3/6 md:w-3/6 lg:w-2/6 mb-6">
 
-  {/* Card Body */}
-  <div className="relative bg-[#0d1b3e]/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl px-5 pt-10 pb-5 -mt-6 mx-2">
+        {/* Cover Banner */}
+        <div className="relative h-24 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 overflow-hidden">
+          {/* Decorative blobs */}
+          <div className="absolute -top-4 -left-4 w-24 h-24 bg-white/10 rounded-full blur-xl" />
+          <div className="absolute -bottom-4 right-8 w-32 h-32 bg-blue-300/20 rounded-full blur-2xl" />
+        </div>
 
-    {/* Avatar — overlaps the banner */}
-    <div className="absolute -top-8 left-5">
-      <div className="relative">
-        <img
-          src={user.profileImageURL}
-          crossOrigin="anonymous"
-          alt="profile"
-          className="h-16 w-16 rounded-2xl object-cover ring-4 ring-[#0d1b3e] shadow-lg"
-        />
-        {/* Online dot */}
-        <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-400 rounded-full ring-2 ring-[#0d1b3e]" />
-      </div>
-    </div>
+        {/* Card Body */}
+        <div className="relative bg-[#0d1b3e]/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl px-5 pt-10 pb-5 -mt-6 mx-2">
 
-    {/* Name + Email */}
-    <div className="mb-4">
-      <h2 className="text-white font-bold text-lg leading-tight">
-        {user.fullname || "Unknown"}
-      </h2>
-      <p className="text-blue-300/80 text-sm">{user.email}</p>
-    </div>
+          {/* Avatar — overlaps the banner */}
+          <div className="absolute -top-8 left-5">
+            <div className="relative">
+              <img
+                src={user.profileImageURL}
+                crossOrigin="anonymous"
+                alt="profile"
+                className="h-16 w-16 rounded-2xl object-cover ring-4 ring-[#0d1b3e] shadow-lg"
+              />
+              {/* Online dot */}
+              <span className="absolute bottom-1 right-1 w-3 h-3 bg-green-400 rounded-full ring-2 ring-[#0d1b3e]" />
+            </div>
+          </div>
 
-    {/* Stats Row */}
-    <div className="flex justify-around bg-white/5 rounded-xl py-3 mb-4 border border-white/10">
-      <div className="flex flex-col items-center">
-        <span className="text-white font-bold text-lg">{posts.length}</span>
-        <span className="text-gray-400 text-xs">Posts</span>
-      </div>
-      <div className="w-px bg-white/10" />
-      <div className="flex flex-col items-center">
-        <span className="text-white font-bold text-lg">
-          {posts.reduce((acc, p) => acc + likes.filter(l => l.postId === p._id).length, 0)}
-        </span>
-        <span className="text-gray-400 text-xs">Likes</span>
-      </div>
-      <div className="w-px bg-white/10" />
-      <div className="flex flex-col items-center">
-        <span className="text-white font-bold text-lg">
-          {posts.reduce((acc, p) => acc + comments.filter(c => c.postId === p._id).length, 0)}
-        </span>
-        <span className="text-gray-400 text-xs">Comments</span>
-      </div>
-    </div>
+          {/* Name + Email */}
+          <div className="mb-4">
+            <h2 className="text-white font-bold text-lg leading-tight">
+              {user.fullname || "Unknown"}
+            </h2>
+            <p className="text-blue-300/80 text-sm">{user.email}</p>
+          </div>
 
-    {/* Action Buttons */}
-    <div className="flex gap-2">
-      <Link to="/post" className="flex-1">
-        <button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 
+          {/* Stats Row */}
+          <div className="flex justify-around bg-white/5 rounded-xl py-3 mb-4 border border-white/10">
+            <div className="flex flex-col items-center">
+              <span className="text-white font-bold text-lg">{posts.length}</span>
+              <span className="text-gray-400 text-xs">Posts</span>
+            </div>
+            <div className="w-px bg-white/10" />
+            <div className="flex flex-col items-center">
+              <span className="text-white font-bold text-lg">
+                {posts.reduce((acc, p) => acc + likes.filter(l => l.postId === p._id).length, 0)}
+              </span>
+              <span className="text-gray-400 text-xs">Likes</span>
+            </div>
+            <div className="w-px bg-white/10" />
+            <div className="flex flex-col items-center">
+              <span className="text-white font-bold text-lg">
+                {posts.reduce((acc, p) => acc + comments.filter(c => c.postId === p._id).length, 0)}
+              </span>
+              <span className="text-gray-400 text-xs">Comments</span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Link to="/post" className="flex-1">
+              <button className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 
           text-white text-sm font-semibold py-2 rounded-xl transition-all duration-200 hover:shadow-[0_0_16px_rgba(59,130,246,0.5)]">
-          <ImagePlus className="w-4 h-4" />
-          New Post
-        </button>
-      </Link>
-      <button
-        onClick={logout}
-        className="flex items-center justify-center gap-2 bg-white/5 hover:bg-red-500/20 border border-white/10
+                <ImagePlus className="w-4 h-4" />
+                New Post
+              </button>
+            </Link>
+            <button
+              onClick={logout}
+              className="flex items-center justify-center gap-2 bg-white/5 hover:bg-red-500/20 border border-white/10
           hover:border-red-500/40 text-gray-300 hover:text-red-400 text-sm font-semibold px-4 py-2 
           rounded-xl transition-all duration-200"
-      >
-        <LogOut className="w-4 h-4" />
-        Logout
-      </button>
-    </div>
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </button>
+          </div>
 
-  </div>
-</div>
-<div className="bg-[#0307fc54] w-full border-r shadow-xl border-blue-300 p-3 text-xl font-bold text-white sm:w-1/3  rounded-xl mb-4">
-  <p>
+        </div>
+      </div>
+      <div className="bg-[#0307fc54] w-full border-r shadow-xl border-blue-300 p-3 text-xl font-bold text-white sm:w-1/3  rounded-xl mb-4">
+        <p>
           Total Posts: {posts.length}
         </p></div>
       {/* Post List */}
-        {Loading ? (
-          <div className='w-full grid md:grid-cols-3 lg:grid-cols-4 gap-2 p-2'>
+      {Loading ? (
+        <div className='w-full grid md:grid-cols-3 lg:grid-cols-4 gap-2 p-2'>
           {[...Array(6)].map((_, index) => <SkeletonCard key={index} />)}
         </div>
-        ) :
-          posts.length === 0 ? (<p className="text-gray-500 italic">No posts yet.</p>) :
-            (
-              <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-2"> 
-        {      posts.map((post) => {
-             return (<PostCard
-              key={post._id}
-              post={post}
-              comments={comments}
-              likes={likes}
-              user={user}
-              toggleLike={toggleLike}
-            />)
-            })}
+      ) :
+        posts.length === 0 ? (<p className="text-gray-500 italic">No posts yet.</p>) :
+          (
+            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-2">
+              {posts.map((post) => {
+                return (<ProfilePostCard
+                  key={post._id}
+                  post={post}
+                  comments={comments}
+                  likes={likes}
+                  user={user}
+                  toggleLike={toggleLike}
+                  onDelete={handlePostDeleted}
+                />)
+              })}
             </div>
-            )}
+          )}
     </div>
 
   )

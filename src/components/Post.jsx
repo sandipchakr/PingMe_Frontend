@@ -173,7 +173,7 @@ function Post() {
 
       const cloudinaryData = await cloudinaryRes.json();
 
-      if (!cloudinaryData.secure_url) {
+      if (!cloudinaryData.secure_url || !cloudinaryData.public_id) {
         throw new Error("Cloudinary upload failed");
       }
 
@@ -182,6 +182,7 @@ function Post() {
         title: data.title,
         content: data.content,
         coverImgUrl: cloudinaryData.secure_url,
+        public_id: cloudinaryData.public_id
       };
 
       // Step 3: Send post data to your backend
